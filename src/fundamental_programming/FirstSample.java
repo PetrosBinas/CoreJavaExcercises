@@ -1,3 +1,5 @@
+package fundamental_programming;
+
 public class FirstSample {
 
     public static void main(String[] args){

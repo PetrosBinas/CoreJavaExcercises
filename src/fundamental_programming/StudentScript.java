@@ -1,3 +1,5 @@
+package fundamental_programming;
+
 import java.util.Scanner;
 
 public class StudentScript {
