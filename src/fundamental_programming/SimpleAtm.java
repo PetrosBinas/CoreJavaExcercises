@@ -92,6 +92,7 @@ class UserAccount {
                 }
             }
             catch (InputMismatchException e) {
+                sc.next();
                 System.out.println("Type a valid numeric amount!");
             }
         }
@@ -105,12 +106,16 @@ class UserAccount {
 
             try {
                 withdrawAmount = sc.nextDouble();
-                if (withdrawAmount > 0) {
+                if (withdrawAmount > 0 && withdrawAmount > this.usrBalance) {
                     this.usrBalance -= withdrawAmount;
                     break;
                 }
+                else {
+                    System.out.printf("Insufficient balance! Current balance: %f", this.usrBalance);
+                }
             }
             catch (InputMismatchException e) {
+                sc.next();
                 System.out.println("Type a valid numeric amount!");
             }
         }

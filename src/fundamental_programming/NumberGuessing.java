@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class NumberGuessing {
 
-    static void main() {
+    public static void main(String[] args) {
 
         // num creation as an obj
         Scanner sc = new Scanner(System.in);
