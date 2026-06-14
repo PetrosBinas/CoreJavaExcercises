@@ -1,11 +1,52 @@
 package objects_and_classes;
 
+import java.util.Scanner;
+
 public class BankApp {
 
     static void main() {
 
+        Scanner sc = new Scanner(System.in);
 
+        logInInteract(sc);
 
+    }
+
+    static void logInInteract(Scanner sc) {
+
+        System.out.println("Welcome to BinBank!");
+
+        String firstName;
+        String lastName;
+        String concatName;
+        String pass;
+
+        while(true) {
+            System.out.print("Type your First Name: ");
+            firstName = sc.next();
+            System.out.println();
+            if(!firstName.isBlank()) {
+                break;
+            }
+        }
+
+        while(true) {
+            System.out.print("Type Your Last Name: ");
+            lastName = sc.next();
+            System.out.println();
+            if(!lastName.isBlank()) {
+                break;
+            }
+        }
+
+        while(true) {
+            System.out.print("Type Your Banking Password: ");
+            pass = sc.next();
+            System.out.println();
+            if(!pass.isBlank()){
+                break;
+            }
+        }
     }
 
 }
