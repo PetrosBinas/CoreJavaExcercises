@@ -9,6 +9,16 @@ public class TripApp {
 
         Scanner sc = new Scanner(System.in);
         Car clientCar = clientPrompt(sc);
+        double kmToTravel = userDistanceToTravel(sc);
+
+        if(clientCar.maxKm() > kmToTravel) {
+            double fuelNotUsed = (clientCar.getConsumption() * kmToTravel) / 100;
+            System.out.printf("You Will Reach Your Destination and Still have %f With 1 Tank!!\n", fuelNotUsed);
+        }
+        else {
+            int tanksToConsume = (int) (kmToTravel / clientCar.maxKm()) + 1; //+1 because we rounded it off by making it integer so we will need at least the integer from the division plus 1 to be safe!
+            System.out.printf("You Will Need %d Tanks To Reach Your Destination!", tanksToConsume);
+        }
     }
 
     static Car clientPrompt(Scanner sc) {
@@ -75,6 +85,27 @@ public class TripApp {
         }
 
         return new Car(brand, model, consumption, fuelCapacity);
+    }
+
+    static double userDistanceToTravel(Scanner sc) {
+        double kmToTravel = 0;
+        while (true) {
+            try {
+                System.out.println("Type The Amount of km You Want to Travel:");
+                kmToTravel = sc.nextDouble();
+                if(kmToTravel <= 0) {
+                    throw new Exception();
+                }
+                break;
+            }
+            catch (InputMismatchException e) {
+                System.out.println("Type a Valid Number for The Km To be Traveled!");
+            }
+            catch (Exception e) {
+                System.out.println("Distance Cannot be A Negative Number!");
+            }
+        }
+        return kmToTravel;
     }
 
 }
