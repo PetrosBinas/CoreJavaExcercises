@@ -30,11 +30,52 @@ public class DuelGame {
         });
     }
 
-    static void getGladiatorChoice(Scanner sc) {
+    static void getGladiatorChoice(Scanner sc, ArrayList<Character> gladiatorLst) {
 
-        
+        Character gladiator1;
+        Character gladiator2;
+        String name;
+
+        while (true) {
+            System.out.println("Type the First Gladiator of Your Choice:");
+            try {
+                name = sc.next();
+                gladiator1 = gladiatorExists(name, gladiatorLst);
+                if (gladiator1 == null) {
+                    throw new Exception();
+                }
+                break;
+            }
+            catch (Exception e) {
+                System.out.println("Gladiator name not valid!");
+            }
+        }
+
+        while (true) {
+            System.out.println("Type the Second Gladiator of Your Choice:");
+            try {
+                name = sc.next();
+                gladiator2 = gladiatorExists(name, gladiatorLst);
+                if (gladiator2 == null) {
+                    throw new Exception();
+                }
+                break;
+            }
+            catch (Exception e) {
+                System.out.println("Gladiator name not valid!");
+            }
+        }
     }
 
+    static Character gladiatorExists(String glName, ArrayList<Character> gladiatorLst) {
+
+        for (Character gladiator : gladiatorLst) {
+            if (gladiator.getName().equalsIgnoreCase(glName.toLowerCase())) {
+                return gladiator;
+            }
+        }
+        return null;
+    }
 }
 
 class Character {
