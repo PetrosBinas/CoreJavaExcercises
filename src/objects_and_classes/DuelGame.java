@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class DuelGame {
 
-    static void main() {
+    public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
 
@@ -19,7 +19,52 @@ public class DuelGame {
         gladiatorLst.add(new Character("Necromancer", 85, 32, 7));
 
         characterChoice(gladiatorLst);
+        ArrayList<Character> gladiatorsToBattle = getGladiatorChoice(sc, gladiatorLst);
+        duelLogic(gladiatorsToBattle.get(0), gladiatorsToBattle.get(1));
 
+    }
+
+    static void duelLogic(Character gladiator1, Character gladiator2) {
+
+        while (true) {
+
+            //gladiator1 attacks gladiator2
+            int damage2 = gladiator1.getAttackPower() - gladiator2.getDefence();
+            int healthg2 = gladiator2.getHealth() - damage2;
+            gladiator2.setHealth(healthg2);
+            try {
+                Thread.sleep(1500);
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (gladiator2.getHealth() < 0) {
+                System.out.printf("%s Won, %s Died", gladiator1.getName(), gladiator2.getName());
+                break;
+            }
+            else {
+                System.out.printf("%s got %d Damage and has now %d Health!\n", gladiator2.getName(), damage2, gladiator2.getHealth());
+            }
+
+            //gladiator2 attacks gladiator1
+            int damage1 = gladiator2.getAttackPower() - gladiator1.getDefence();
+            int healthg1 = gladiator1.getHealth() - damage1;
+            gladiator1.setHealth(healthg1);
+            try {
+                Thread.sleep(1500);
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (gladiator1.getHealth() < 0) {
+                System.out.printf("%s Won, %s Died", gladiator2.getName(), gladiator1.getName());
+                break;
+            }
+            else {
+                System.out.printf("%s got %d Damage and has now %d Health!\n", gladiator1.getName(), damage1, gladiator1.getHealth());
+            }
+
+        }
     }
 
     static void characterChoice(ArrayList<Character> gladiatorLst) {
@@ -30,10 +75,11 @@ public class DuelGame {
         });
     }
 
-    static void getGladiatorChoice(Scanner sc, ArrayList<Character> gladiatorLst) {
+    static ArrayList<Character> getGladiatorChoice(Scanner sc, ArrayList<Character> gladiatorLst) {
 
         Character gladiator1;
         Character gladiator2;
+        ArrayList<Character> gladiatorsToBattle = new ArrayList<Character>();
         String name;
 
         while (true) {
@@ -44,6 +90,7 @@ public class DuelGame {
                 if (gladiator1 == null) {
                     throw new Exception();
                 }
+                gladiatorsToBattle.add(gladiator1);
                 break;
             }
             catch (Exception e) {
@@ -59,12 +106,14 @@ public class DuelGame {
                 if (gladiator2 == null) {
                     throw new Exception();
                 }
+                gladiatorsToBattle.add(gladiator2);
                 break;
             }
             catch (Exception e) {
                 System.out.println("Gladiator name not valid!");
             }
         }
+        return gladiatorsToBattle;
     }
 
     static Character gladiatorExists(String glName, ArrayList<Character> gladiatorLst) {
