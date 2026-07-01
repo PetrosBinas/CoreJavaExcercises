@@ -44,11 +44,58 @@ class Product {
 class Inventory {
 
     private static Product[] products;
-    private long productCount;
+    private static int productCount;
+
+    // Getters
+    public static Product[] getProducts() { return products; }
+    public static int getProductCount() { return productCount; }
+
+    //Setters
+    public static void setProducts(Product[] newProductArr) { products = newProductArr; }
+    private static void reloadProductCount() { productCount = products.length; }
 
     // Methods
+
+    // Adds a new product by manually making the products array bigger by 1 place
     public static void addProduct(Product newProduct) {
-        
+        Product[] temp = new Product[productCount + 1];
+
+        for (int i = 0; i < productCount; i++) {
+            temp[i] = products[i];
+        }
+        temp[productCount] = newProduct;
+        products = temp;
+        reloadProductCount();
+    }
+
+    public static void printInventory() {
+        String pName;
+        for (Product product : products) {
+            pName = product.getName();
+            System.out.println(pName);
+        }
+    }
+
+    public static double totalInventoryValue() {
+        double totalValue = 0;
+        double productPrice = 0;
+        double productQuantity = 0;
+        for (Product product : products) {
+            productPrice = product.getPrice();
+            productQuantity = (double) product.getQuantity();
+            totalValue += (productQuantity * productPrice);
+        }
+        System.out.printf("Total Inventory Value: %.2f$", totalValue);
+        return totalValue;
+    }
+
+    public static Product findProductByName(String pName) {
+        for (Product product : products) {
+            if (product.getName().equals(pName)) {
+                return product;
+            }
+        }
+        return null;
     }
 
 }
