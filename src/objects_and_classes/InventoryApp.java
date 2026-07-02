@@ -1,9 +1,157 @@
 package objects_and_classes;
 
+import java.security.spec.RSAOtherPrimeInfo;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 public class InventoryApp {
 
     public static void main(String[] args) {
 
+        System.out.println("Welcome to Inventory App!");
+        Inventory inventory = new Inventory();
+        Scanner sc = new Scanner(System.in);
+        mainLoop(sc, inventory);
+
+    }
+
+    public static void printMenu() {
+        System.out.println("Available Actions:");
+        System.out.println("1. Add Product to Inventory");
+        System.out.println("2. Search For a Product by Name");
+        System.out.println("3. Increase the Quantity of a Product");
+        System.out.println("4. Decrease the Quantity of a Product");
+        System.out.println("5. Print All Products");
+        System.out.println("6. Print all Inventory Value");
+        System.out.println("7. Exit Program");
+    }
+
+    public static Product findProduct(String pName, Inventory inventory) {
+        Product product = inventory.findProductByName(pName);
+        return product;
+    }
+
+    public static String getValidProdName(Scanner sc) {
+        String pName = "";
+        while (true) {
+            try {
+                System.out.println("Type The Product Name: ");
+                pName = sc.next();
+                if (!pName.isBlank()) {
+                    return pName;
+                } else {
+                    throw new Exception();
+                }
+            } catch (Exception e) {
+                System.out.println("Not a Valid Product Name");
+            }
+        }
+    }
+
+    public static int getMenuChoice(Scanner sc) {
+        while (true) {
+            System.out.println("Type the Choice of the Action You Want to Take");
+            int choice = 0;
+            try {
+                choice = sc.nextInt();
+                if (choice >= 1 && choice <= 7) {
+                    return choice;
+                } else {
+                    throw new Exception();
+                }
+            } catch (InputMismatchException e) {
+                sc.next();
+                System.out.println("Not a Valid Integer!");
+            } catch (Exception e) {
+                System.out.println("Type an Integer in Range 1-7");
+            }
+        }
+    }
+
+    public static double getValidProdPrice(Scanner sc) {
+        double pPrice = 0;
+        while (true) {
+            System.out.println("Type a Vald Price: ");
+            try {
+                pPrice = sc.nextDouble();
+                if (pPrice > 0) {
+                    return pPrice;
+                } else {
+                    throw new Exception();
+                }
+            } catch (InputMismatchException e) {
+                sc.next();
+                System.out.println("Not a Valid Number");
+            } catch (Exception e) {
+                System.out.println("Price Must Be Bigger Than 0!");
+            }
+        }
+    }
+
+    public static long getValidProdQuantity(Scanner sc) {
+        long pQuantity = 0;
+        while (true) {
+            System.out.println("Type a Valid Quantity: ");
+            try {
+                pQuantity = sc.nextLong();
+                if (pQuantity > 0) {
+                    return pQuantity;
+                } else {
+                    throw new Exception();
+                }
+            } catch (InputMismatchException e) {
+                sc.next();
+                System.out.println("Not a Valid Number");
+            } catch (Exception e) {
+                System.out.println("Price Must Be Bigger Than 0");
+            }
+        }
+    }
+
+    public static void mainLoop(Scanner sc, Inventory inventory) {
+        while (true) {
+            int menuChoice = 0;
+            printMenu();
+            menuChoice = getMenuChoice(sc);
+
+            if (menuChoice == 1) { // Adding New Product
+                String pName = getValidProdName(sc);
+                double pPrice = getValidProdPrice(sc);
+                long pQuantity = getValidProdQuantity(sc);
+                Product p = new Product(pName, pPrice, pQuantity);
+                inventory.addProduct(p);
+            } else if (menuChoice == 2) { // Search if a Product Exists
+                String pName = getValidProdName(sc);
+                Product product = findProduct(pName, inventory);
+                if (product != null) {
+                    System.out.println("Product Exists!");
+                    System.out.printf("Name: %s\nPrice: %f\nQuantity: %d\n", product.getName(), product.getPrice(), product.getQuantity());
+                } else {
+                    System.out.println("Product Doesn't Exist In Inventory!");
+                }
+            }
+            else if (menuChoice == 3) {
+                String pName = getValidProdName(sc);
+                Product product = findProduct(pName, inventory);
+                System.out.println("Type the Ammount of Products You Want to Add");
+                long q = getValidProdQuantity(sc);
+                product.increaseQuantity(q);
+            }
+            else if (menuChoice == 4) {
+                String pName = getValidProdName(sc);
+                Product product = findProduct(pName, inventory);
+                System.out.println("Type The Ammount of Products You Want to Remove");
+                long q = getValidProdQuantity(sc);
+                product.decreaseQuantity(q);
+            }
+            else if (menuChoice == 5) {
+                inventory.printInventory();
+            }
+            else if (menuChoice == 6) {
+                inventory.totalInventoryValue();
+            }
+            else { break; }
+        }
     }
 }
 
@@ -85,13 +233,13 @@ class Inventory {
             productQuantity = (double) product.getQuantity();
             totalValue += (productQuantity * productPrice);
         }
-        System.out.printf("Total Inventory Value: %.2f$", totalValue);
+        System.out.printf("Total Inventory Value: %.2f$\n", totalValue);
         return totalValue;
     }
 
     public static Product findProductByName(String pName) {
         for (Product product : products) {
-            if (product.getName().equals(pName)) {
+            if (product.getName().equalsIgnoreCase(pName)) {
                 return product;
             }
         }
