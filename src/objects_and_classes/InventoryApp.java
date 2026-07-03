@@ -18,12 +18,13 @@ public class InventoryApp {
     public static void printMenu() {
         System.out.println("Available Actions:");
         System.out.println("1. Add Product to Inventory");
-        System.out.println("2. Search For a Product by Name");
-        System.out.println("3. Increase the Quantity of a Product");
-        System.out.println("4. Decrease the Quantity of a Product");
-        System.out.println("5. Print All Products");
-        System.out.println("6. Print all Inventory Value");
-        System.out.println("7. Exit Program");
+        System.out.println("2. Remove Product From Inventory");
+        System.out.println("3. Search For a Product by Name");
+        System.out.println("4. Increase the Quantity of a Product");
+        System.out.println("5. Decrease the Quantity of a Product");
+        System.out.println("6. Print All Products");
+        System.out.println("7. Print all Inventory Value");
+        System.out.println("8. Exit Program");
     }
 
     public static Product findProduct(String pName, Inventory inventory) {
@@ -120,7 +121,20 @@ public class InventoryApp {
                 long pQuantity = getValidProdQuantity(sc);
                 Product p = new Product(pName, pPrice, pQuantity);
                 inventory.addProduct(p);
-            } else if (menuChoice == 2) { // Search if a Product Exists
+                System.out.println("Product Added!");
+            }
+            else if (menuChoice == 2) {
+                String pName = getValidProdName(sc);
+                Product product = findProduct(pName, inventory);
+                if (product != null) {
+                    inventory.removeProduct(product);
+                    System.out.println("Product Removed!");
+                }
+                else {
+                    System.out.println("Product Doesn't Exist in Inventory");
+                }
+            }
+            else if (menuChoice == 3) { // Search if a Product Exists
                 String pName = getValidProdName(sc);
                 Product product = findProduct(pName, inventory);
                 if (product != null) {
@@ -130,24 +144,24 @@ public class InventoryApp {
                     System.out.println("Product Doesn't Exist In Inventory!");
                 }
             }
-            else if (menuChoice == 3) {
+            else if (menuChoice == 4) {
                 String pName = getValidProdName(sc);
                 Product product = findProduct(pName, inventory);
                 System.out.println("Type the Ammount of Products You Want to Add");
                 long q = getValidProdQuantity(sc);
                 product.increaseQuantity(q);
             }
-            else if (menuChoice == 4) {
+            else if (menuChoice == 5) {
                 String pName = getValidProdName(sc);
                 Product product = findProduct(pName, inventory);
                 System.out.println("Type The Ammount of Products You Want to Remove");
                 long q = getValidProdQuantity(sc);
                 product.decreaseQuantity(q);
             }
-            else if (menuChoice == 5) {
+            else if (menuChoice == 6) {
                 inventory.printInventory();
             }
-            else if (menuChoice == 6) {
+            else if (menuChoice == 7) {
                 inventory.totalInventoryValue();
             }
             else { break; }
@@ -212,6 +226,21 @@ class Inventory {
             temp[i] = products[i];
         }
         temp[productCount] = newProduct;
+        products = temp;
+        reloadProductCount();
+    }
+
+    public static void removeProduct(Product productToRemove) {
+        Product[] temp = new Product[productCount - 1];
+
+        for (int i = 0, j = 0; i < productCount && j < productCount; i++, j++) {
+            if (products[i] == productToRemove) {
+                j--;
+                continue; }
+            else {
+                temp[j] = products[i];
+            }
+        }
         products = temp;
         reloadProductCount();
     }
